@@ -1,6 +1,6 @@
 # UPAAS: Unsloth Platform As A Service ⚡
 ### Enterprise Sovereign AI Infrastructure Fabric & Distributed Memory Mesh
-**A Product of RMAA Holdings Inc.** • Licensed under **Business Source License 1.1 (BSL 1.1)**
+**A Product of RMAA Holdings** • Licensed under **Business Source License 1.1 (BSL 1.1)**
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Render%20Cloud-00d2d3?style=for-the-badge&logo=render)](https://upaas.onrender.com)
 [![Engine](https://img.shields.io/badge/Native%20Engine-TorchJIT%20C%2B%2B20-ff4757?style=for-the-badge)](https://github.com/RMAAPK/TJIT)
@@ -134,7 +134,7 @@ pipeline.layer.evict()
 ---
 
 ## 📜 Intellectual Property & Licensing
-**UPAAS** is an enterprise technology asset developed by **RMAA Holdings Inc.**
+**UPAAS** is an enterprise technology asset developed by **RMAA Holdings**
 - **License**: [Business Source License 1.1 (BSL 1.1)](LICENSE)
 - **Change Date**: 2030-01-01 (Transitions to Apache License 2.0)
 - **Third-Party Attributions**:
@@ -142,4 +142,4 @@ pipeline.layer.evict()
   - PyTorch (BSD-3-Clause License)
 
 ---
-*© 2026 RMAA Holdings Inc. All rights reserved. Sovereign Decentralized AI Fabric.*
+*© 2026 RMAA Holdings All rights reserved. Sovereign Decentralized AI Fabric.*
