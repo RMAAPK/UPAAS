@@ -1,7 +1,8 @@
-# UPAAS: Unsloth Platform As A Service ⚡
-### Distributed Inference Orchestrator & Heterogeneous GPU Fabric
+# UPAAS (v0-beta): Unsloth Platform As A Service ⚡
+### Distributed Inference Orchestrator & Heterogeneous GPU Fabric • Pre-Release v0-beta
 Personal Research & Hobby Project • Licensed under **MIT License**
 
+[![Version](https://img.shields.io/badge/Release-v0--beta%20(Experimental)-orange?style=for-the-badge)](https://github.com/thealidev/UPAAS)
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Render%20Cloud-00d2d3?style=for-the-badge&logo=render)](https://upaas.onrender.com)
 [![Engine](https://img.shields.io/badge/Native%20Engine-TorchJIT%20C%2B%2B20-ff4757?style=for-the-badge)](https://github.com/thealidev/TJIT)
 [![Network](https://img.shields.io/badge/Transport-RFC%209221%20QUIC%20Datagrams-2ed573?style=for-the-badge)](https://tools.ietf.org/html/rfc9221)
