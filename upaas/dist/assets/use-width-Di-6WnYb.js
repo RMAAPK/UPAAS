@@ -1,0 +1,1 @@
+import{o as e}from"./rolldown-runtime-BCiCTKAo.js";import{t}from"./react-BWPDF9mI.js";var n=e(t(),1);function r(e){let[t,r]=(0,n.useState)(0);return(0,n.useLayoutEffect)(()=>{if(!e)return;let t=()=>r(e.clientWidth);t();let n=new ResizeObserver(t);return n.observe(e),()=>n.disconnect()},[e]),t}export{r as t};

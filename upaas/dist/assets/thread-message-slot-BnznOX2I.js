@@ -1,0 +1,1 @@
+import{o as e}from"./rolldown-runtime-BCiCTKAo.js";import{t}from"./react-BWPDF9mI.js";var n=e(t(),1);function r(e,t){return t?`edit`:e===`user`?`user`:e===`assistant`?`assistant`:`none`}function i(e,t){return r(e,t)!==`none`}function a(e){let t=(0,n.createElement)(e);return()=>t}export{i as n,r,a as t};

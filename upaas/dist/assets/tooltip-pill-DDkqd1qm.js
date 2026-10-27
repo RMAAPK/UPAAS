@@ -1,0 +1,1 @@
+function e(e){if(!e)return;let t=getComputedStyle(e),n=Number.parseFloat(t.lineHeight)||16,r=e.clientHeight-Number.parseFloat(t.paddingTop)-Number.parseFloat(t.paddingBottom);e.classList.toggle(`rounded-full!`,r<n*1.5)}export{e as t};

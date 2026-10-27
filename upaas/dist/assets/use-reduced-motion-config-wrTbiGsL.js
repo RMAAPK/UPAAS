@@ -1,0 +1,1 @@
+import{o as e}from"./rolldown-runtime-BCiCTKAo.js";import{t}from"./react-BWPDF9mI.js";import{p as n}from"./auth-BaIqegC_.js";import{rl as r}from"./settings-DZca1g-Y.js";var i=e(t(),1);function a(){let e=r(),{reducedMotion:t}=(0,i.useContext)(n);return t===`never`?!1:t===`always`||e}export{a as t};

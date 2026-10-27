@@ -1,0 +1,1 @@
+function e(){return{window,document}}function t(t,n=e()){let r=()=>t(),i=()=>{n.document.hidden||t()};return n.window.addEventListener(`focus`,r),n.document.addEventListener(`visibilitychange`,i),()=>{n.window.removeEventListener(`focus`,r),n.document.removeEventListener(`visibilitychange`,i)}}export{t};

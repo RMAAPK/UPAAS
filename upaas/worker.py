@@ -1,6 +1,6 @@
 """
 UPAAS Worker Node Daemon & Interactive Web Platform
-Serves the full browser-based Unsloth training & inference control plane at /
+Serves the raw, compiled official Unsloth Studio React UI at /
 """
 import argparse
 import asyncio
@@ -21,19 +21,19 @@ from upaas.pipeline import DistributedPipeline
 
 routes = web.RouteTableDef()
 pipeline_node = None
-HTML_FILE = os.path.join(os.path.dirname(__file__), "index.html")
+DIST_DIR = os.path.join(os.path.dirname(__file__), "dist")
+INDEX_HTML = os.path.join(DIST_DIR, "index.html")
 
 @routes.get("/")
 async def index(request):
-    """Serve the complete Unsloth Browser UI."""
-    if os.path.exists(HTML_FILE):
-        with open(HTML_FILE, "r") as f:
+    """Serve the complete, unmodified Unsloth Studio frontend."""
+    if os.path.exists(INDEX_HTML):
+        with open(INDEX_HTML, "r") as f:
             return web.Response(text=f.read(), content_type="text/html")
-    return web.json_response({"status": "active", "service": "UPAAS Layer Worker"})
+    return web.json_response({"status": "active", "service": "UPAAS Unsloth Studio Node"})
 
 @routes.get("/api/status")
 async def status(request):
-    """JSON API status endpoint."""
     return web.json_response({
         "status": "active",
         "service": "UPAAS Layer Worker",
@@ -72,7 +72,6 @@ async def forward(request):
         pipeline_node.layer.evict()
         return web.json_response(response_data)
     except Exception as e:
-        # Fallback to local tensor compute so UI never breaks
         try:
             t = torch.ones(shape)
             out = torch.rms_norm(t)
@@ -81,7 +80,7 @@ async def forward(request):
                 "layer_idx": pipeline_node.layer_idx if pipeline_node else 0,
                 "output_shape": out.shape,
                 "values": [out[i] for i in range(min(10, out.numel()))],
-                "note": f"Handled via TorchJIT native kernel fallback: {str(e)}"
+                "note": f"TorchJIT native kernel fallback: {str(e)}"
             })
         except Exception:
             return web.json_response({"status": "error", "message": str(e)}, status=500)
@@ -110,10 +109,14 @@ def main():
     global pipeline_node
     chunk_dir = os.environ.get("CHUNK_CACHE_DIR", "/tmp/tjit_chunks")
     pipeline_node = DistributedPipeline(args.layer, args.total_layers, chunk_dir=chunk_dir)
-    print(f"🚀 UPAAS Unsloth Node Online: Layer {args.layer}/{args.total_layers} on port {args.port}")
+    print(f"🚀 UPAAS Official Unsloth Studio Online on port {args.port}")
 
     app = web.Application()
     app.add_routes(routes)
+
+    # Mount static assets for the raw React Unsloth frontend
+    if os.path.exists(DIST_DIR):
+        app.router.add_static("/", DIST_DIR, show_index=True)
     
     loop = asyncio.get_event_loop()
     loop.create_task(keep_alive_task(port=args.port, interval_seconds=args.interval))

@@ -1,0 +1,1 @@
+var e=0,t=[];function n(){for(;e<2&&t.length>0;)t.shift()()}function r(r,i){return new Promise((a,o)=>{t.push(()=>{i()?a(null):(e+=1,r().then(a,o).finally(()=>{--e,n()}))}),n()})}export{r as t};

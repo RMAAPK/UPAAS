@@ -1,0 +1,1 @@
+import"./auth-BaIqegC_.js";import{W as e}from"./api-yd5XCMyx.js";import{t}from"./react-eRPq7xFj.js";var n=t((e,t)=>({pending:null,offer:t=>e({pending:t}),take:()=>{let n=t().pending;return n&&e({pending:null}),n}}));typeof window<`u`&&window.addEventListener(e,()=>{n.setState({pending:null})});export{n as t};
