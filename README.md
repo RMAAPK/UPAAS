@@ -17,21 +17,21 @@ Personal Research & Hobby Project • Licensed under **MIT License**
 ---
 
 ## 🏢 Executive Overview & Architecture
-Frontier AI models (such as DeepSeek-V3/R1 671B MoE) are physically too large to fit in single consumer GPUs and cannot be streamed over WAN weights-first due to the Roofline bandwidth limit ($280\text{s/token}$ at 1 Gbps).
+Frontier AI models (such as DeepSeek-V3/R1 671B MoE) are physically too large to fit in single consumer GPUs and cannot be streamed over WAN weights-first due to the Roofline bandwidth limit (280s/token at 1 Gbps).
 
 **UPAAS (Unsloth Platform As A Service)** orchestrates distributed pipeline parallelism across heterogeneous consumer hardware clusters:
 
 1. **Layer-Block Pipeline Orchestration**:
    - Deploys 24-stage GPU clusters (holding 2–3 MoE layers in 24GB VRAM) or 4–5 stage hybrid workstations (experts in DDR5 RAM, attention in VRAM).
-   - Only compact BF16 activation vectors (~14.3 KB per token position) move across the network, reducing data movement by $6,000\times$.
+   - Only compact BF16 activation vectors (~14.3 KB per token position) move across the network, reducing data movement by 6,000x.
 2. **RFC 9221 QUIC Datagrams + RaptorQ FEC**:
    - Activation tensors travel over unreliable QUIC Datagrams with Forward Error Correction under safe path MTU (~1,200 bytes), eliminating TCP head-of-line blocking on residential packet loss.
    - Reliable control streams are reserved for commit packets, hop receipts, and dispute arbitration.
 3. **Native Multi-Token Prediction (MTP) Speculation**:
-   - Exploits the native 14B MTP head on the final termination stage to draft $\gamma = 2$ candidate tokens directly to Stage 1.
+   - Exploits the native 14B MTP head on the final termination stage to draft `gamma = 2` candidate tokens directly to Stage 1.
    - Amortizes the 24-hop WAN latency floor, targeting **8–18 tokens/sec** in pure VRAM swarms.
 4. **Deterministic Position-Indexed Inverse-CDF Sampling**:
-   - Enforces $u_{pos} = \text{PRF}(\text{client\_seed}, \text{seq\_id}, pos)$ over monotonic token-ID ordered support.
+   - Enforces `u_pos = PRF(client_seed, seq_id, pos)` over monotonic token-ID ordered support.
    - Makes client-side verification exact (~200 B logit payload) and completely independent of speculation depth or rollbacks.
 5. **Decentralized State & Merkle Registry**:
    - Shard distributions are verified against distributor Ed25519-signed Merkle manifests.
