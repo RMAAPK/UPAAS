@@ -53,9 +53,4 @@ RUN mkdir -p /tmp/tjit_chunks
 
 EXPOSE 10000
 
-# Health check to ensure PaaS monitors never drop the instance
-HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:10000/health || exit 1
-
-ENTRYPOINT ["python", "-m", "upaas.worker"]
-CMD ["--layer", "0", "--total-layers", "80", "--port", "10000"]
+CMD ["sh", "-c", "python -m upaas.worker --port ${PORT:-10000} --layer ${LAYER_INDEX:-0} --total-layers ${TOTAL_LAYERS:-80}"]
