@@ -13,6 +13,9 @@ import json
 
 # Add TorchJIT to sys.path
 sys.path.append(os.path.abspath("/media/thealidev/RMAA HDD1/RMAAPK/TorchJIT/python"))
+if os.path.exists("/app/torchjit/python"):
+    sys.path.append("/app/torchjit/python")
+
 import torchjit as torch
 from torchjit.pooler import StatePooler
 from torchjit.ipfs_transport import IPFSTransport
@@ -26,19 +29,19 @@ class IPFSLayerSlice:
     3. Translates CIDs into executable zero-copy TorchJIT tensors in RAM.
     4. Computes forward activation and immediately evicts to maintain zero memory footprint.
     """
-    def __init__(self, layer_id: int, model_id: str = "rmaa-500b-deepseek", hidden_dim: int = 4096):
+    def __init__(self, layer_id: int, model_id: str = "rmaa-500b-deepseek", hidden_dim: int = 4096, chunk_dir: str = "/tmp/tjit_chunks"):
         self.layer_id = layer_id
         self.model_id = model_id
         self.hidden_dim = hidden_dim
+        self.chunk_dir = chunk_dir
         self.pooler = StatePooler()
-        self.ipfs = IPFSTransport()
+        self.ipfs = IPFSTransport(local_cache_dir=chunk_dir)
         self.w_gate = None
 
     def stream_and_translate_from_ipfs(self):
         """Fetches CIDs from DB and translates IPFS chunks into executable memory."""
         chunk_manifest = self.pooler.get_layer_manifest(self.model_id, self.layer_id)
         if chunk_manifest and len(chunk_manifest) > 0:
-            # Build tensor from IPFS chunks
             target = torch.zeros([self.hidden_dim, self.hidden_dim])
             from torchjit import _lib
             import ctypes
@@ -60,7 +63,6 @@ class IPFSLayerSlice:
                 offset += len(translated_bytes)
             self.w_gate = target
         else:
-            # Fallback zero-copy slice initialization if cold/unregistered
             self.w_gate = torch.ones([self.hidden_dim, self.hidden_dim])
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -78,12 +80,13 @@ class IPFSLayerSlice:
         self.w_gate = None
 
 class DistributedPipeline:
-    def __init__(self, layer_idx: int, total_layers: int, model_id: str = "rmaa-500b-deepseek", next_peer_url: str = None):
+    def __init__(self, layer_idx: int, total_layers: int, model_id: str = "rmaa-500b-deepseek", next_peer_url: str = None, chunk_dir: str = "/tmp/tjit_chunks"):
         self.layer_idx = layer_idx
         self.total_layers = total_layers
         self.model_id = model_id
         self.next_peer_url = next_peer_url
-        self.layer = IPFSLayerSlice(layer_idx, model_id=model_id)
+        self.chunk_dir = chunk_dir
+        self.layer = IPFSLayerSlice(layer_idx, model_id=model_id, chunk_dir=chunk_dir)
 
     def process_activation(self, input_tensor: torch.Tensor) -> torch.Tensor:
         """Process incoming layer activation and return output tensor."""
