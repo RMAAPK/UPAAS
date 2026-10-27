@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-# Clone or embed TorchJIT engine
+# Clone latest TorchJIT engine
 RUN git clone https://github.com/RMAAPK/TJIT.git /app/torchjit
 
 # Compile Native C++20 TorchJIT shared library
@@ -47,7 +47,6 @@ COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY upaas /app/upaas
-COPY scripts /app/scripts
 
 # Pre-create micro-chunk scratch directory
 RUN mkdir -p /tmp/tjit_chunks
