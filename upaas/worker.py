@@ -1,7 +1,7 @@
 """
 UPAAS Worker Node Daemon & Interactive Web Platform
 Serves the raw, compiled official Unsloth Studio React UI at /
-with complete /api/auth/status and /api/auth/login compatibility.
+with complete API coverage for models, settings, system probes, and streaming inference.
 """
 import argparse
 import asyncio
@@ -26,40 +26,82 @@ from upaas.auth_router import (
     handle_identity,
     handle_current_user
 )
+from upaas.studio_api import (
+    api_health,
+    api_system_info,
+    api_models_list,
+    api_settings,
+    api_studio_status,
+    api_chat_completions,
+    api_recipes,
+    api_rag_status
+)
 
 routes = web.RouteTableDef()
 pipeline_node = None
 DIST_DIR = os.path.join(os.path.dirname(__file__), "dist")
 INDEX_HTML = os.path.join(DIST_DIR, "index.html")
 
-# Unsloth Studio API Endpoints
+# Authentication APIs
 @routes.get("/api/auth/status")
-async def api_auth_status(request):
-    return await handle_auth_status(request)
+async def r_auth_status(request): return await handle_auth_status(request)
 
 @routes.post("/api/auth/login")
-async def api_auth_login(request):
-    return await handle_login(request)
+async def r_auth_login(request): return await handle_login(request)
 
 @routes.post("/api/auth/logout")
-async def api_auth_logout(request):
-    return await handle_logout(request)
+async def r_auth_logout(request): return await handle_logout(request)
 
 @routes.get("/api/auth/identity")
-async def api_auth_identity(request):
-    return await handle_identity(request)
+async def r_auth_identity(request): return await handle_identity(request)
 
 @routes.get("/api/users/me")
-async def api_users_me(request):
-    return await handle_current_user(request)
+async def r_users_me(request): return await handle_current_user(request)
 
+# Studio System & Health APIs
+@routes.get("/api/health")
+async def r_api_health(request): return await api_health(request)
+
+@routes.get("/health")
+async def r_health(request): return await api_health(request)
+
+@routes.get("/api/system/info")
+async def r_system_info(request): return await api_system_info(request)
+
+@routes.get("/api/system/gpu")
+async def r_system_gpu(request): return await api_system_info(request)
+
+@routes.get("/api/studio/install-source")
+async def r_install_src(request): return await api_studio_status(request)
+
+@routes.get("/api/studio/update-status")
+async def r_update_stat(request): return await api_studio_status(request)
+
+# Studio Models & Settings APIs
 @routes.get("/api/models")
-async def api_models(request):
-    return web.json_response([
-        {"id": "unsloth/deepseek-r1-distill-llama-8b", "name": "DeepSeek R1 Distill 8B", "shards": "1-3MB", "status": "ready"},
-        {"id": "unsloth/Llama-3.3-70B-Instruct", "name": "Llama 3.3 70B Instruct", "shards": "Distributed", "status": "ready"},
-        {"id": "rmaa/sovereign-500b-deepseek", "name": "RMAA Sovereign 500B", "shards": "IPFS Swarm", "status": "ready"}
-    ])
+async def r_models(request): return await api_models_list(request)
+
+@routes.get("/api/models/downloaded")
+async def r_models_down(request): return await api_models_list(request)
+
+@routes.get("/api/settings")
+async def r_settings(request): return await api_settings(request)
+
+@routes.get("/api/settings/models")
+async def r_settings_models(request): return await api_settings(request)
+
+# Studio Chat & Inference APIs
+@routes.post("/v1/chat/completions")
+async def r_chat_v1(request): return await api_chat_completions(request)
+
+@routes.post("/api/inference/chat")
+async def r_chat_inf(request): return await api_chat_completions(request)
+
+@routes.get("/api/recipes")
+async def r_recipes(request): return await api_recipes(request)
+
+@routes.get("/api/rag/status")
+async def r_rag(request): return await api_rag_status(request)
 
 @routes.get("/api/status")
 async def status(request):
@@ -73,24 +115,15 @@ async def status(request):
         "platform": "Unsloth Over Platform As A Service"
     })
 
-@routes.get("/health")
-async def health(request):
-    return web.json_response({
-        "status": "healthy",
-        "layer_idx": pipeline_node.layer_idx if pipeline_node else -1
-    })
-
 @routes.post("/forward")
 async def forward(request):
     try:
         data = await request.json()
         values = data.get("tensor", [1.0, 1.0, 1.0, 1.0])
         shape = data.get("shape", [1, len(values)])
-        
         t = torch.empty(shape)
         for i, v in enumerate(values):
             t[i] = float(v)
-            
         out = pipeline_node.process_activation(t)
         response_data = {
             "status": "success",
@@ -101,18 +134,7 @@ async def forward(request):
         pipeline_node.layer.evict()
         return web.json_response(response_data)
     except Exception as e:
-        try:
-            t = torch.ones(shape)
-            out = torch.rms_norm(t)
-            return web.json_response({
-                "status": "success",
-                "layer_idx": pipeline_node.layer_idx if pipeline_node else 0,
-                "output_shape": out.shape,
-                "values": [out[i] for i in range(min(10, out.numel()))],
-                "note": f"TorchJIT native kernel fallback: {str(e)}"
-            })
-        except Exception:
-            return web.json_response({"status": "error", "message": str(e)}, status=500)
+        return web.json_response({"status": "error", "message": str(e)}, status=500)
 
 # Serve root index.html explicitly
 @routes.get("/")
