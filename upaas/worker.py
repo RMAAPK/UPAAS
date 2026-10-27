@@ -114,6 +114,25 @@ async def forward(request):
         except Exception:
             return web.json_response({"status": "error", "message": str(e)}, status=500)
 
+# Serve root index.html explicitly
+@routes.get("/")
+async def root_index(request):
+    if os.path.exists(INDEX_HTML):
+        return web.FileResponse(INDEX_HTML)
+    return web.json_response({"status": "active", "service": "UPAAS Unsloth Studio Node"})
+
+# Single Page App (SPA) fallback handler
+@routes.get("/{tail:.*}")
+async def spa_fallback(request):
+    tail = request.match_info["tail"]
+    target_path = os.path.join(DIST_DIR, tail)
+    if os.path.isfile(target_path):
+        return web.FileResponse(target_path)
+    # SPA fallback: Return index.html for all client-side routes (e.g. /chat, /models)
+    if os.path.exists(INDEX_HTML):
+        return web.FileResponse(INDEX_HTML)
+    return web.Response(status=404, text="Not Found")
+
 async def keep_alive_task(port: int, interval_seconds: int = 780):
     await asyncio.sleep(10)
     print(f"⚡ [UPAAS KeepAlive] Pulse active on port {port} every {interval_seconds}s")
@@ -142,10 +161,6 @@ def main():
 
     app = web.Application()
     app.add_routes(routes)
-
-    # Mount static assets for the raw React Unsloth frontend
-    if os.path.exists(DIST_DIR):
-        app.router.add_static("/", DIST_DIR, show_index=True)
     
     loop = asyncio.get_event_loop()
     loop.create_task(keep_alive_task(port=args.port, interval_seconds=args.interval))
