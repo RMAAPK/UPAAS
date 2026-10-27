@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: upaas-layer-worker
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m upaas.worker --layer 0 --total-layers 80
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: KEEP_ALIVE_INTERVAL
+        value: 780
