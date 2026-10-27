@@ -1,4 +1,4 @@
-# UPAAS™: Unsloth Platform As A Service ⚡
+# UPAAS: Unsloth Platform As A Service ⚡
 ### Enterprise Sovereign AI Infrastructure Fabric & Distributed Memory Mesh
 **A Product of RMAA Holdings Inc.** • Licensed under **Business Source License 1.1 (BSL 1.1)**
 
@@ -19,12 +19,12 @@
 ## 🏢 Executive Overview & Corporate Architecture
 Modern Frontier AI inference and fine-tuning are historically restricted by the **"Gigabyte Barrier"**: bloated PyTorch runtimes, 6.7GB+ container images, and massive parameter weights that exceed the physical RAM of commodity infrastructure.
 
-**UPAAS™ (Unsloth Platform As A Service)** re-architects AI model execution from the ground up:
+**UPAAS (Unsloth Platform As A Service)** re-architects AI model execution from the ground up:
 1. **Decoupled Thin Worker Architecture**: Replaces monolithic gigabyte containers with a feather-light **~25MB execution daemon**.
 2. **1–3 MB Micro-Sharded Weights**: Deconstructs massive models (from 8B up to 500B+ parameters) into cryptographic **Content-Addressed (CID)** micro-slices.
 3. **Decentralized IPFS Storage Mesh**: Model weights and shared libraries live across the global, immutable IPFS node network at zero hosting cost. Once hashed, they persist forever.
 4. **Universal Transaction Pooler Coordination**: Employs an ultra-fast PostgreSQL Transaction Pooler (Port 6543 / PgBouncer / Supavisor) that stores **only 120-byte cryptographic CID manifests and decryption keys**—zero weight load on the database.
-5. **TorchJIT™ C++20 Zero-Copy Execution**: Streams active layer slices straight into memory, executes transformer kernels (`RMSNorm`, `SiLU`, fast LoRA projections), and immediately evicts them, enabling 500B models to execute within standard **512MB RAM free-tier instances**.
+5. **TorchJIT C++20 Zero-Copy Execution**: Streams active layer slices straight into memory, executes transformer kernels (`RMSNorm`, `SiLU`, fast LoRA projections), and immediately evicts them, enabling 500B models to execute within standard **512MB RAM free-tier instances**.
 
 ---
 
@@ -67,7 +67,7 @@ Modern Frontier AI inference and fine-tuning are historically restricted by the 
 
 ## ⚡ Key Differentiators
 
-| Capability | Traditional AI Platforms (AWS/HuggingFace) | UPAAS™ + TorchJIT™ Fabric |
+| Capability | Traditional AI Platforms (AWS/HuggingFace) | UPAAS + TorchJIT Fabric |
 | :--- | :--- | :--- |
 | **Container Footprint** | 6.7 GB – 15 GB (Docker bloat) | **~25 MB ultra-lean container** |
 | **Model Ingestion** | Monolithic load (30 GB - 1 TB RAM required) | **1–3 MB micro-sharded dynamic streaming** |
@@ -79,7 +79,7 @@ Modern Frontier AI inference and fine-tuning are historically restricted by the 
 ---
 
 ## 🛠️ Technology Stack
-- **Native Runtime Core**: [TorchJIT™ C++20 Engine](https://github.com/RMAAPK/TJIT) (64-byte alignment, zero-copy `mmap`, content-addressed memory).
+- **Native Runtime Core**: [TorchJIT C++20 Engine](https://github.com/RMAAPK/TJIT) (64-byte alignment, zero-copy `mmap`, content-addressed memory).
 - **Presentation Layer**: Unsloth Studio Production React/TypeScript Suite (Chat, Model Picker, Data Recipes, GGUF Export, RAG, MCP Bridge).
 - **Communication Fabric**: Asynchronous Python 3.12 Web Daemon with POSIX `memfd_create` in-memory library loading.
 - **Decentralized Storage**: InterPlanetary File System (IPFS) public gateway rotation (`ipfs.io`, `dweb.link`, `cloudflare-ipfs`).
@@ -134,7 +134,7 @@ pipeline.layer.evict()
 ---
 
 ## 📜 Intellectual Property & Licensing
-**UPAAS™** is an enterprise technology asset developed by **RMAA Holdings Inc.**
+**UPAAS** is an enterprise technology asset developed by **RMAA Holdings Inc.**
 - **License**: [Business Source License 1.1 (BSL 1.1)](LICENSE)
 - **Change Date**: 2030-01-01 (Transitions to Apache License 2.0)
 - **Third-Party Attributions**:
