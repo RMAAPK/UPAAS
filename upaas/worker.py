@@ -29,12 +29,18 @@ from upaas.auth_router import (
 from upaas.studio_api import (
     api_health,
     api_system_info,
-    api_models_list,
-    api_settings,
-    api_studio_status,
-    api_chat_completions,
+    api_models_all,
+    api_models_downloaded,
+    api_settings_all,
+    api_engines,
+    api_providers,
+    api_mcp_servers,
     api_recipes,
-    api_rag_status
+    api_rag_status,
+    api_chat_completions,
+    api_accounts,
+    api_accounts_me,
+    api_chat_history
 )
 
 routes = web.RouteTableDef()
@@ -58,12 +64,22 @@ async def r_auth_identity(request): return await handle_identity(request)
 @routes.get("/api/users/me")
 async def r_users_me(request): return await handle_current_user(request)
 
-# Studio System & Health APIs
+# Accounts APIs
+@routes.get("/api/accounts")
+async def r_accounts(request): return await api_accounts(request)
+
+@routes.get("/api/accounts/me")
+async def r_accounts_me(request): return await api_accounts_me(request)
+
+# System, Health & Probe APIs
 @routes.get("/api/health")
 async def r_api_health(request): return await api_health(request)
 
 @routes.get("/health")
 async def r_health(request): return await api_health(request)
+
+@routes.get("/api/system")
+async def r_system(request): return await api_system_info(request)
 
 @routes.get("/api/system/info")
 async def r_system_info(request): return await api_system_info(request)
@@ -71,31 +87,44 @@ async def r_system_info(request): return await api_system_info(request)
 @routes.get("/api/system/gpu")
 async def r_system_gpu(request): return await api_system_info(request)
 
-@routes.get("/api/studio/install-source")
-async def r_install_src(request): return await api_studio_status(request)
+@routes.get("/api/engines")
+async def r_engines(request): return await api_engines(request)
 
-@routes.get("/api/studio/update-status")
-async def r_update_stat(request): return await api_studio_status(request)
-
-# Studio Models & Settings APIs
+# Models APIs
 @routes.get("/api/models")
-async def r_models(request): return await api_models_list(request)
+async def r_models(request): return await api_models_all(request)
 
 @routes.get("/api/models/downloaded")
-async def r_models_down(request): return await api_models_list(request)
+async def r_models_down(request): return await api_models_downloaded(request)
 
+# Settings & Preferences APIs
 @routes.get("/api/settings")
-async def r_settings(request): return await api_settings(request)
+async def r_settings(request): return await api_settings_all(request)
 
 @routes.get("/api/settings/models")
-async def r_settings_models(request): return await api_settings(request)
+async def r_settings_models(request): return await api_settings_all(request)
 
-# Studio Chat & Inference APIs
+@routes.get("/api/preferences")
+async def r_preferences(request): return await api_settings_all(request)
+
+# Chat, MCP, RAG APIs
+@routes.get("/api/chat-history")
+async def r_chat_history(request): return await api_chat_history(request)
+
+@routes.get("/api/threads")
+async def r_threads(request): return await api_chat_history(request)
+
 @routes.post("/v1/chat/completions")
 async def r_chat_v1(request): return await api_chat_completions(request)
 
 @routes.post("/api/inference/chat")
 async def r_chat_inf(request): return await api_chat_completions(request)
+
+@routes.get("/api/providers")
+async def r_providers(request): return await api_providers(request)
+
+@routes.get("/api/mcp/servers")
+async def r_mcp(request): return await api_mcp_servers(request)
 
 @routes.get("/api/recipes")
 async def r_recipes(request): return await api_recipes(request)
