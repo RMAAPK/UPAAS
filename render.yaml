@@ -1,11 +1,19 @@
 services:
   - type: web
-    name: upaas-layer-worker
-    env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: python -m upaas.worker --layer 0 --total-layers 80
+    name: upaas-worker
+    runtime: docker
+    dockerfilePath: Dockerfile
+    plan: free
+    region: oregon
     envVars:
       - key: PORT
         value: 10000
       - key: KEEP_ALIVE_INTERVAL
         value: 780
+      - key: CHUNK_CACHE_DIR
+        value: /tmp/tjit_chunks
+      - key: TOTAL_LAYERS
+        value: 80
+      - key: LAYER_INDEX
+        value: 0
+    autoDeploy: true
