@@ -13,60 +13,110 @@ from aiohttp import web
 import json
 import os
 import sys
+import asyncio
 
 async def api_accounts(request):
-    return web.json_response([
-        {"id": "owner_account_0", "username": "unsloth", "role": "owner", "created_at": 1700000000}
-    ])
+    """
+    Handles /api/accounts.
+    Frontend expects either a dictionary with `accounts` key or an array.
+    We return both by using a dict with `accounts`.
+    """
+    data = [
+        {
+            "account_id": "owner_account_0",
+            "username": "unsloth",
+            "role": "owner",
+            "is_active": True,
+            "created_at": 1700000000,
+            "model_allowlist": []
+        }
+    ]
+    return web.json_response({
+        "accounts": data,
+        "total": len(data)
+    })
 
 async def api_accounts_me(request):
     return web.json_response({
         "id": "owner_account_0",
+        "account_id": "owner_account_0",
         "username": "unsloth",
         "role": "owner",
         "email": "owner@rmaa.holdings",
-        "has_password": True
+        "has_password": True,
+        "is_active": True,
+        "permissions": ["all"]
+    })
+
+async def api_auth_api_keys(request):
+    """
+    Handles /api/auth/api-keys.
+    Frontend calls: (await e.json()).api_keys.filter(e => e.is_active)
+    """
+    return web.json_response({
+        "api_keys": [
+            {
+                "id": "key_upaas_master",
+                "name": "Default Sovereign Access Key",
+                "prefix": "sk-upaas-",
+                "is_active": True,
+                "created_at": 1700000000,
+                "expires_at": None,
+                "scope": "full"
+            }
+        ]
     })
 
 async def api_chat_history(request):
     return web.json_response({
         "threads": [],
+        "projects": [],
         "total": 0
     })
 
 async def api_models_downloaded(request):
-    return web.json_response([
+    models = [
         {
             "id": "unsloth/deepseek-r1-distill-llama-8b",
             "name": "DeepSeek R1 Distill (8B) [IPFS Micro-Sharded]",
+            "repo_id": "unsloth/deepseek-r1-distill-llama-8b",
             "size_bytes": 4900000000,
             "architecture": "llama",
             "engine": "torchjit",
             "shards": "2.0 MB / CID",
             "is_default": True,
+            "loaded": True,
             "tags": ["featured", "unsloth", "ipfs"]
         },
         {
             "id": "unsloth/Llama-3.3-70B-Instruct",
             "name": "Llama 3.3 (70B) [UPAAS Distributed Pipeline]",
+            "repo_id": "unsloth/Llama-3.3-70B-Instruct",
             "size_bytes": 38000000000,
             "architecture": "llama",
             "engine": "torchjit",
             "shards": "Distributed Swarm",
             "is_default": False,
+            "loaded": False,
             "tags": ["70b", "unsloth", "distributed"]
         },
         {
             "id": "rmaa/sovereign-500b-deepseek",
             "name": "RMAA Sovereign (500B) [IPFS Global Node Mesh]",
+            "repo_id": "rmaa/sovereign-500b-deepseek",
             "size_bytes": 260000000000,
             "architecture": "deepseek",
             "engine": "torchjit",
             "shards": "1-3MB / CIDv1",
             "is_default": False,
+            "loaded": False,
             "tags": ["500b", "frontier", "sovereign"]
         }
-    ])
+    ]
+    return web.json_response({
+        "models": models,
+        "total": len(models)
+    })
 
 async def api_models_all(request):
     return await api_models_downloaded(request)
@@ -88,7 +138,33 @@ async def api_settings_all(request):
             "kind": "ipfs_distributed_mesh",
             "chunk_size_bytes": 2097152,
             "status": "connected"
-        }
+        },
+        "allowed": True,
+        "default_allowed": True,
+        "locked_by_environment": False,
+        "backend": "torchjit_sandbox",
+        "available": True,
+        "reason": "",
+        "limitations": [],
+        "enabled": True,
+        "forced_by_env": False,
+        "url": "",
+        "aliases": [],
+        "caches": [],
+        "total_bytes": 0,
+        "reclaimable_bytes": 0,
+        "free_bytes": 100000000000,
+        "total_disk_bytes": 500000000000,
+        "results": [],
+        "video_cpu": False,
+        "path": "/usr/local/bin/torchjit",
+        "max_chars": 64000,
+        "default_chars": 16000,
+        "min_chars": 2000,
+        "minutes": 0,
+        "lanUrls": ["http://localhost:10000"],
+        "resolved": True,
+        "granted": True
     })
 
 async def api_engines(request):
