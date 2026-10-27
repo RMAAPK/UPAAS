@@ -1,9 +1,9 @@
 # UPAAS: Unsloth Platform As A Service ⚡
 ### Enterprise Sovereign AI Infrastructure Fabric & Distributed Memory Mesh
-**A Product of RMAA Holdings** • Licensed under **MIT License**
+Personal Research & Hobby Project • Licensed under **MIT License**
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Render%20Cloud-00d2d3?style=for-the-badge&logo=render)](https://upaas.onrender.com)
-[![Engine](https://img.shields.io/badge/Native%20Engine-TorchJIT%20C%2B%2B20-ff4757?style=for-the-badge)](https://github.com/RMAAPK/TJIT)
+[![Engine](https://img.shields.io/badge/Native%20Engine-TorchJIT%20C%2B%2B20-ff4757?style=for-the-badge)](https://github.com/thealidev/TJIT)
 [![Network](https://img.shields.io/badge/Storage-Decentralized%20IPFS%20Mesh-2ed573?style=for-the-badge&logo=ipfs)](https://ipfs.tech)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 
@@ -79,7 +79,7 @@ Modern Frontier AI inference and fine-tuning are historically restricted by the 
 ---
 
 ## 🛠️ Technology Stack
-- **Native Runtime Core**: [TorchJIT C++20 Engine](https://github.com/RMAAPK/TJIT) (64-byte alignment, zero-copy `mmap`, content-addressed memory).
+- **Native Runtime Core**: [TorchJIT C++20 Engine](https://github.com/thealidev/TJIT) (64-byte alignment, zero-copy `mmap`, content-addressed memory).
 - **Presentation Layer**: Unsloth Studio Production React/TypeScript Suite (Chat, Model Picker, Data Recipes, GGUF Export, RAG, MCP Bridge).
 - **Communication Fabric**: Asynchronous Python 3.12 Web Daemon with POSIX `memfd_create` in-memory library loading.
 - **Decentralized Storage**: InterPlanetary File System (IPFS) public gateway rotation (`ipfs.io`, `dweb.link`, `cloudflare-ipfs`).
@@ -134,7 +134,7 @@ pipeline.layer.evict()
 ---
 
 ## 📜 Intellectual Property & Licensing
-**UPAAS** is an enterprise technology asset developed by **RMAA Holdings**
+**UPAAS** is an experimental hobby project by @thealidev
 - **License**: [MIT License](LICENSE)
 - **Change Date**: 2030-01-01 (Transitions to Apache License 2.0)
 - **Third-Party Attributions**:
@@ -142,4 +142,4 @@ pipeline.layer.evict()
   - PyTorch (BSD-3-Clause License)
 
 ---
-*© 2026 RMAA Holdings All rights reserved. Sovereign Decentralized AI Fabric.*
+*Private experimental hobby project.*

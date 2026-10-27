@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2026 RMAA Holdings
+Copyright (c) 2026 thealidev
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,9 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-### Third-Party Software Notices
-- **Unsloth**: Portions derived from or designed to interoperate with Unsloth Studio. Licensed under Apache License 2.0 (Copyright 2023-present Unsloth AI).
-- **PyTorch**: Interoperability interfaces conform with PyTorch specifications under BSD 3-Clause License.
