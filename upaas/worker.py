@@ -1,6 +1,7 @@
 """
 UPAAS Worker Node Daemon & Interactive Web Platform
 Serves the raw, compiled official Unsloth Studio React UI at /
+with complete /api/auth/status and /api/auth/login compatibility.
 """
 import argparse
 import asyncio
@@ -18,19 +19,47 @@ elif os.path.exists("/media/thealidev/RMAA HDD1/RMAAPK/TorchJIT/python"):
 
 import torchjit as torch
 from upaas.pipeline import DistributedPipeline
+from upaas.auth_router import (
+    handle_auth_status,
+    handle_login,
+    handle_logout,
+    handle_identity,
+    handle_current_user
+)
 
 routes = web.RouteTableDef()
 pipeline_node = None
 DIST_DIR = os.path.join(os.path.dirname(__file__), "dist")
 INDEX_HTML = os.path.join(DIST_DIR, "index.html")
 
-@routes.get("/")
-async def index(request):
-    """Serve the complete, unmodified Unsloth Studio frontend."""
-    if os.path.exists(INDEX_HTML):
-        with open(INDEX_HTML, "r") as f:
-            return web.Response(text=f.read(), content_type="text/html")
-    return web.json_response({"status": "active", "service": "UPAAS Unsloth Studio Node"})
+# Unsloth Studio API Endpoints
+@routes.get("/api/auth/status")
+async def api_auth_status(request):
+    return await handle_auth_status(request)
+
+@routes.post("/api/auth/login")
+async def api_auth_login(request):
+    return await handle_login(request)
+
+@routes.post("/api/auth/logout")
+async def api_auth_logout(request):
+    return await handle_logout(request)
+
+@routes.get("/api/auth/identity")
+async def api_auth_identity(request):
+    return await handle_identity(request)
+
+@routes.get("/api/users/me")
+async def api_users_me(request):
+    return await handle_current_user(request)
+
+@routes.get("/api/models")
+async def api_models(request):
+    return web.json_response([
+        {"id": "unsloth/deepseek-r1-distill-llama-8b", "name": "DeepSeek R1 Distill 8B", "shards": "1-3MB", "status": "ready"},
+        {"id": "unsloth/Llama-3.3-70B-Instruct", "name": "Llama 3.3 70B Instruct", "shards": "Distributed", "status": "ready"},
+        {"id": "rmaa/sovereign-500b-deepseek", "name": "RMAA Sovereign 500B", "shards": "IPFS Swarm", "status": "ready"}
+    ])
 
 @routes.get("/api/status")
 async def status(request):
