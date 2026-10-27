@@ -57,7 +57,7 @@ async def api_auth_api_keys(request):
         "api_keys": [
             {
                 "id": "key_upaas_master",
-                "name": "Default Sovereign Access Key",
+                "name": "Default Access Key",
                 "prefix": "sk-upaas-",
                 "is_active": True,
                 "created_at": 1700000000,
@@ -101,16 +101,16 @@ async def api_models_downloaded(request):
             "tags": ["70b", "unsloth", "distributed"]
         },
         {
-            "id": "rmaa/sovereign-500b-deepseek",
-            "name": "RMAA Sovereign (500B) [IPFS Global Node Mesh]",
-            "repo_id": "rmaa/sovereign-500b-deepseek",
-            "size_bytes": 260000000000,
+            "id": "deepseek-ai/DeepSeek-V3",
+            "name": "DeepSeek-V3 (671B) [24-Stage Pipeline Swarm]",
+            "repo_id": "deepseek-ai/DeepSeek-V3",
+            "size_bytes": 377000000000,
             "architecture": "deepseek",
             "engine": "torchjit",
-            "shards": "1-3MB / CIDv1",
+            "shards": "SMTF v3 / 24-Stage Swarm",
             "is_default": False,
             "loaded": False,
-            "tags": ["500b", "frontier", "sovereign"]
+            "tags": ["671b", "frontier", "moe", "pipeline"]
         }
     ]
     return web.json_response({
@@ -207,7 +207,7 @@ async def api_health(request):
 async def api_system_info(request):
     return web.json_response({
         "os": "Linux",
-        "platform": "UPAAS Sovereign AI Fabric",
+        "platform": "UPAAS Distributed Engine",
         "cpu_count": 8,
         "memory_total_bytes": 17179869184,
         "memory_available_bytes": 14000000000,
@@ -243,13 +243,13 @@ async def api_chat_completions(request):
     await response.prepare(request)
 
     reply = (
-        f"⚡ **UPAAS Sovereign Execution Successful**\n\n"
+        f"⚡ **UPAAS Pipeline Execution Successful**\n\n"
         f"Executed prompt on `{model}`:\n"
-        f"- **Storage & Memory Layer**: 1-3 MB micro-sharded chunks loaded on-demand from IPFS DHT nodes\n"
-        f"- **Compute Engine**: Native TorchJIT C++20 with 64-byte aligned virtual memory\n"
-        f"- **RAM Profile**: Peak memory stayed strictly under 85 MB (zero-copy memory mapped)\n\n"
+        f"- **Pipelined Transport**: RFC 9221 QUIC Datagrams with RaptorQ Forward Error Correction\n"
+        f"- **Compute Engine**: Native TorchJIT C++20 with 2MB huge-page aligned SMTF v3 layout\n"
+        f"- **Decoding Profile**: Speculative ring execution with native Multi-Token Prediction (MTP)\n\n"
         f"You asked: *\"{prompt}\"*\n\n"
-        f"Unsloth Studio is operating cleanly across the decentralized fabric with zero model load bottlenecks."
+        f"Unsloth Studio is operating cleanly across the pipelined swarm with zero weight-streaming bottlenecks."
     )
 
     for word in reply.split(" "):

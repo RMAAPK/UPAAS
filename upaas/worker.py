@@ -183,7 +183,7 @@ async def universal_api_backlog(request):
         "api_keys": [
             {
                 "id": "key_upaas_master",
-                "name": "Default Sovereign Access Key",
+                "name": "Default Access Key",
                 "prefix": "sk-upaas-",
                 "is_active": True,
                 "created_at": 1700000000,

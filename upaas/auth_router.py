@@ -17,7 +17,7 @@ import base64
 
 DEMO_USER = "unsloth"
 DEMO_PASS = "12345678"
-JWT_SECRET = "rmaa_sovereign_studio_secret_key_2026"
+JWT_SECRET = "upaas_studio_secret_key_2026"
 
 def generate_jwt(username: str) -> str:
     header = base64.urlsafe_b64encode(json.dumps({"alg": "HS256", "typ": "JWT"}).encode()).decode().rstrip("=")
@@ -83,7 +83,7 @@ async def handle_logout(request):
     return response
 
 async def handle_identity(request):
-    return web.json_response({"proof": "sovereign_identity_valid"})
+    return web.json_response({"proof": "identity_valid"})
 
 async def handle_current_user(request):
     return web.json_response({

@@ -1,5 +1,5 @@
 # UPAAS: Unsloth Platform As A Service ⚡
-### Sovereign Distributed Inference Orchestrator & Heterogeneous GPU Fabric
+### Distributed Inference Orchestrator & Heterogeneous GPU Fabric
 Personal Research & Hobby Project • Licensed under **MIT License**
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Render%20Cloud-00d2d3?style=for-the-badge&logo=render)](https://upaas.onrender.com)
