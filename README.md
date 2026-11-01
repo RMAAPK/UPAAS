@@ -1,5 +1,8 @@
 # UPAAS (v0-beta): Unsloth Platform As A Service ⚡
 ### Distributed Inference Orchestrator & Heterogeneous GPU Fabric • Pre-Release v0-beta
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23859095.svg)](https://doi.org/10.5281/zenodo.23859095)
+
 Personal Research & Hobby Project • Licensed under **MIT License**
 
 [![Version](https://img.shields.io/badge/Release-v0--beta%20(Experimental)-orange?style=for-the-badge)](https://github.com/thealidev/UPAAS)
