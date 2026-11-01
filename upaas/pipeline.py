@@ -107,7 +107,8 @@ class LayerBlockStage:
         }
 
 class DistributedPipeline:
-    def __init__(self, stage_idx: int = 1, total_stages: int = 24, model_id: str = "deepseek-v3-671b"):
+    def __init__(self, stage_idx: int = 1, total_stages: int = 24, model_id: str = "deepseek-v3-671b", chunk_dir: str = "/tmp/tjit_chunks"):
+        self.chunk_dir = chunk_dir
         self.stage_idx = stage_idx
         self.total_stages = total_stages
         self.model_id = model_id
