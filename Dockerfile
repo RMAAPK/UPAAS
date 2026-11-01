@@ -4,15 +4,14 @@ FROM python:3.12-slim-bookworm AS builder
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
-    git \
     g++ \
     cmake \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Clone latest TorchJIT engine
-RUN git clone https://github.com/RMAAPK/TJIT.git /app/torchjit
+# Copy vendored TorchJIT engine
+COPY torchjit /app/torchjit
 
 # Compile Native C++20 TorchJIT shared library
 WORKDIR /app/torchjit
